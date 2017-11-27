@@ -47,11 +47,14 @@ p {
 
 .video_duration {
   color: white;
-  
   text-align: right;
   margin-right: 25px;
   margin-bottom: -25px;
   margin-top: -25px;
+}
+
+.button.overlay {
+  display: none;
 }
 
 @media (min-width: 750px) {
