@@ -6,41 +6,35 @@ function createHeader() {
 
   const header = document.createElement('h1');
   const text = document.createTextNode('Myndbandaleigan');
+  header.setAttribute('class', 'title');
 
   header.appendChild(text);
   section.appendChild(header);
   document.querySelector('main').appendChild(section);
 }
 
-function showTitle(title) {
-  const section = document.createElement('section');
-  section.setAttribute('class', '');
+function showTitle(section, title) {
+  section.setAttribute('class', 'category');
 
-  const div = document.createElement('div');
-  div.setAttribute('class', '');
-
-  const h2 = document.createElement('h2');
-  h2.setAttribute('class', '');
+  const h1 = document.createElement('h1');
+  h1.setAttribute('class', 'category_title');
   const titill = document.createTextNode(title);
 
-  h2.appendChild(titill);
-  div.appendChild(h2);
-  section.appendChild(div);
+  h1.appendChild(titill);
+  section.appendChild(h1);
   document.querySelector('main').appendChild(section);
 }
 
-function showVideo(video) {
-  const section = document.createElement('section');
-  section.setAttribute('class', '');
+function showVideo(section, videoboxes, video) {
   document.querySelector('main').appendChild(section);
 
   const div = document.createElement('div');
-  div.setAttribute('class', '');
-  section.appendChild(div);
+  div.setAttribute('class', 'video_box');
+  videoboxes.appendChild(div);
 
   const img = document.createElement('IMG');
   img.src = video.poster;
-  img.setAttribute('class', '');
+  img.setAttribute('class', 'VideoImg');
 
   const id = video.id;
 
@@ -65,11 +59,11 @@ function showVideo(video) {
   div2.appendChild(text);
   div.appendChild(div2);
 
-  const h2 = document.createElement('h2');
+  const pTitle = document.createElement('p');
   const title = document.createTextNode(video.title);
-  h2.setAttribute('class', '');
-  h2.appendChild(title);
-  div.appendChild(h2);
+  pTitle.setAttribute('class', 'video_title');
+  pTitle.appendChild(title);
+  div.appendChild(pTitle);
 
   const date1 = new Date();
   const date1Sec = Math.round(date1.getTime() / 1000);
@@ -86,35 +80,35 @@ function showVideo(video) {
   if (year < timi) {
     const ar = Math.floor(timi / year);
     const yearP = document.createElement('p');
-    yearP.setAttribute('class', '');
+    yearP.setAttribute('class', 'video_date');
     const yearText = document.createTextNode('Fyrir ' + ar + ' árum síðan');
     yearP.appendChild(yearText);
     div.appendChild(yearP);
   } else if (month < timi) {
     const manudur = Math.floor(timi / month);
     const monthP = document.createElement('p');
-    monthP.setAttribute('class', '');
+    monthP.setAttribute('class', 'video_date');
     const monthText = document.createTextNode('Fyrir ' + manudur + ' mánuðum síðan');
     monthP.appendChild(monthText);
     div.appendChild(monthP);
   } else if (week < timi) {
     const vika = Math.floor(timi / week);
     const weekP = document.createElement('p');
-    weekP.setAttribute('class', '');
+    weekP.setAttribute('class', 'video_date');
     const weekText = document.createTextNode('Fyrir ' + vika + ' vikum síðan');
     weekP.appendChild(weekText);
     div.appendChild(weekP);
   } else if (day < timi) {
     const dagur = Math.floor(timi / day);
     const dayP = document.createElement('p');
-    dayP.setAttribute('class', '');
+    dayP.setAttribute('class', 'video_date');
     const dayText = document.createTextNode('Fyrir ' + dagur + ' dögum síðan');
     dayP.appendChild(dayText);
     div.appendChild(dayP);
   } else {
     const klukkutimar = Math.floor(timi / hour);
     const hourP = document.createElement('p');
-    hourP.setAttribute('class', '');
+    hourP.setAttribute('class', 'video_date');
     const hourText = document.createTextNode('Fyrir ' + klukkutimar + ' klukkutímum síðan');
     hourP.appendChild(hourText);
     div.appendChild(hourP);
@@ -132,10 +126,16 @@ const Videos = (() => {
       createHeader();
 
       for (const { title, videos } of data.categories) {
-        showTitle(title);
+        const section = document.createElement('section');
+        const videoboxes = document.createElement('div');
+        videoboxes.setAttribute('class', 'video_boxes');
+
+        showTitle(section, title);
+
+        section.appendChild(videoboxes);
         for (const id of videos) {
           const video = data.videos.find(v => v.id === id);
-          showVideo(video);
+          showVideo(section, videoboxes, video);
         }
       }
     };

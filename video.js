@@ -27,32 +27,66 @@ function play(video) {
   buttons.setAttribute('id', 'buttons');
   main.appendChild(buttons);
 
-
-  createButton(buttons, 'img/back.svg', 'button back');
-  createButton(buttons, 'img/play.svg', 'button play');
-  createButton(buttons, 'img/mute.svg', 'button mute');
-  createButton(buttons, 'img/fullscreen.svg', 'button fullscreen');
-  createButton(buttons, 'img/next.svg', 'button next');
+  createButton(buttons, 'img/play.svg', 'button overlay');
+  createButton(buttons, 'img/back.svg', 'button');
+  createButton(buttons, 'img/play.svg', 'button');
+  createButton(buttons, 'img/pause.svg', 'button hide');
+  createButton(buttons, 'img/mute.svg', 'button');
+  createButton(buttons, 'img/unmute.svg', 'button hide');
+  createButton(buttons, 'img/fullscreen.svg', 'button');
+  createButton(buttons, 'img/next.svg', 'button');
 
   let takkar = buttons.children;
 
-  console.log(takkar[1]);
+  takkar[0].addEventListener('click', () => {
+    vid.play();
+    takkar[0].classList.add('hide');
+    takkar[2].classList.add('hide');
+    takkar[3].classList.remove('hide');
+  });
+
   takkar[1].addEventListener('click', () => {
-    if (vid.paused) {
-      vid.play();
-      const pause = document.createElement('span');
-      const pausepicture = document.createElement('IMG');
-      pausepicture.src = ('img/pause.svg');
-      pause.appendChild(pausepicture);
-      buttons.childNodes[1] = pause;
-    } else {
-      vid.pause();
-      const playbutton = document.createElement('span');
-      const playpicture = document.createElement('IMG');
-      playpicture.src = ('img/play.svg');
-      playbutton.appendChild(playpicture);
-      buttons.childNodes[1] = playbutton;
+    vid.currentTime -= 3;
+  });
+
+  takkar[2].addEventListener('click', () => {
+    vid.play();
+    takkar[0].classList.add('hide');
+    takkar[2].classList.add('hide');
+    takkar[3].classList.remove('hide');
+  });
+
+  takkar[3].addEventListener('click', () => {
+    vid.pause();
+    takkar[0].classList.remove('hide');
+    takkar[2].classList.remove('hide');
+    takkar[3].classList.add('hide');
+  });
+
+  takkar[4].addEventListener('click', () => {
+    vid.muted = true;
+    takkar[4].classList.add('hide');
+    takkar[5].classList.remove('hide');
+  });
+
+  takkar[5].addEventListener('click', () => {
+    vid.muted = false;
+    takkar[4].classList.remove('hide');
+    takkar[5].classList.add('hide');
+  });
+
+  takkar[6].addEventListener('click', () => {
+    if (vid.requestFullscreen) {
+      vid.requestFullscreen();
+    } else if (vid.mozRequestFullScreen) {
+      vid.mozRequestFullScreen();
+    } else if (vid.webkitRequestFullscreen) {
+      vid.webkitRequestFullscreen();
     }
+  });
+
+  takkar[7].addEventListener('click', () => {
+    vid.currentTime += 3;
   });
 }
 
