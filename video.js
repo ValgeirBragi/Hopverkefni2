@@ -103,6 +103,13 @@ function play(video) {
   takkar[6].addEventListener('click', () => {
     vid.currentTime += 3;
   });
+
+  const baka = document.createElement('a');
+  const text = document.createTextNode('Til Baka');
+  baka. setAttribute('class', 'tilBaka');
+  baka.setAttribute('href', 'index.html');
+  baka.appendChild(text);
+  main.appendChild(baka);
 }
 
 
