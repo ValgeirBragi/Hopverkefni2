@@ -36,10 +36,9 @@ function showVideo(section, videoboxes, video) {
   img.src = video.poster;
   img.setAttribute('class', 'VideoImg');
 
-  const id = video.id;
-
+  const { id } = video;
   img.addEventListener('click', () => {
-    window.location.href = 'video.html?id=' + id;
+    window.location.href = `video.html?id=${id}`;
   });
 
   div.appendChild(img);
@@ -48,13 +47,16 @@ function showVideo(section, videoboxes, video) {
   let min = Math.floor(lengd / 60);
   let sek = lengd % 60;
 
-  if(sek < 10){
-      sek = "0" +sek;
+  if (sek < 10) {
+    sek = `0${sek}`;
+  }
+  if (min < 10) {
+    min = `0${min}`;
   }
 
   const div2 = document.createElement('div');
   div2.setAttribute('class', 'video_duration');
-  const text = document.createTextNode(min + ':' + sek);
+  const text = document.createTextNode(`${min}:${sek}`);
 
   div2.appendChild(text);
   div.appendChild(div2);
@@ -81,36 +83,61 @@ function showVideo(section, videoboxes, video) {
     const ar = Math.floor(timi / year);
     const yearP = document.createElement('p');
     yearP.setAttribute('class', 'video_date');
-    const yearText = document.createTextNode('Fyrir ' + ar + ' árum síðan');
-    yearP.appendChild(yearText);
+    if (ar === 1) {
+      const yearText = document.createTextNode('Fyrir 1 ári síðan');
+      yearP.appendChild(yearText);
+    } else {
+      const yearText = document.createTextNode(`Fyrir ${ar} árum síðan`);
+      yearP.appendChild(yearText);
+    }
     div.appendChild(yearP);
   } else if (month < timi) {
     const manudur = Math.floor(timi / month);
     const monthP = document.createElement('p');
     monthP.setAttribute('class', 'video_date');
-    const monthText = document.createTextNode('Fyrir ' + manudur + ' mánuðum síðan');
-    monthP.appendChild(monthText);
+    if (manudur === 1) {
+      const monthText = document.createTextNode('Fyrir 1 mánuði síðan');
+      monthP.appendChild(monthText);
+    } else {
+      const monthText = document.createTextNode(`Fyrir ${manudur} mánuðum síðan`);
+      monthP.appendChild(monthText);
+    }
     div.appendChild(monthP);
   } else if (week < timi) {
     const vika = Math.floor(timi / week);
     const weekP = document.createElement('p');
     weekP.setAttribute('class', 'video_date');
-    const weekText = document.createTextNode('Fyrir ' + vika + ' vikum síðan');
-    weekP.appendChild(weekText);
+    if (vika === 1) {
+      const weekText = document.createTextNode('Fyrir 1 viku síðan');
+      weekP.appendChild(weekText);
+    } else {
+      const weekText = document.createTextNode(`Fyrir ${vika} vikum síðan`);
+      weekP.appendChild(weekText);
+    }
     div.appendChild(weekP);
   } else if (day < timi) {
     const dagur = Math.floor(timi / day);
     const dayP = document.createElement('p');
     dayP.setAttribute('class', 'video_date');
-    const dayText = document.createTextNode('Fyrir ' + dagur + ' dögum síðan');
-    dayP.appendChild(dayText);
+    if (dagur === 1) {
+      const dayText = document.createTextNode('Fyrir 1 degi síðan');
+      dayP.appendChild(dayText);
+    } else {
+      const dayText = document.createTextNode(`Fyrir ${dagur} dögum síðan`);
+      dayP.appendChild(dayText);
+    }
     div.appendChild(dayP);
   } else {
     const klukkutimar = Math.floor(timi / hour);
     const hourP = document.createElement('p');
     hourP.setAttribute('class', 'video_date');
-    const hourText = document.createTextNode('Fyrir ' + klukkutimar + ' klukkutímum síðan');
-    hourP.appendChild(hourText);
+    if (klukkutimar === 1) {
+      const hourText = document.createTextNode('Fyrir 1 klukkutíma síðan');
+      hourP.appendChild(hourText);
+    } else {
+      const hourText = document.createTextNode(`Fyrir ${klukkutimar} klukkutímum síðan`);
+      hourP.appendChild(hourText);
+    }
     div.appendChild(hourP);
   }
 }
@@ -124,17 +151,17 @@ const Videos = (() => {
       const data = JSON.parse(request.response);
 
       createHeader();
-
-      for (const { title, videos } of data.categories) {
+      for (let i = 0; i < data.categories.length; i += 1) {
         const section = document.createElement('section');
         const videoboxes = document.createElement('div');
         videoboxes.setAttribute('class', 'video_boxes');
 
-        showTitle(section, title);
+        showTitle(section, data.categories[i].title);
 
         section.appendChild(videoboxes);
-        for (const id of videos) {
-          const video = data.videos.find(v => v.id === id);
+
+        for (let j = 0; j < data.categories[i].videos.length; j += 1) {
+          const video = data.videos.find(v => v.id === data.categories[i].videos[j]);
           showVideo(section, videoboxes, video);
         }
       }
@@ -142,7 +169,7 @@ const Videos = (() => {
     request.send();
   }
   return {
-    init: init,
+    init,
   };
 })();
 

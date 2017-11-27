@@ -51,7 +51,10 @@ function showVideo(section, videoboxes, video) {
   var sek = lengd % 60;
 
   if (sek < 10) {
-    sek = "0" + sek;
+    sek = '0' + sek;
+  }
+  if (min < 10) {
+    min = '0' + min;
   }
 
   var div2 = document.createElement('div');
@@ -83,36 +86,61 @@ function showVideo(section, videoboxes, video) {
     var ar = Math.floor(timi / year);
     var yearP = document.createElement('p');
     yearP.setAttribute('class', 'video_date');
-    var yearText = document.createTextNode('Fyrir ' + ar + ' árum síðan');
-    yearP.appendChild(yearText);
+    if (ar === 1) {
+      var yearText = document.createTextNode('Fyrir 1 ári síðan');
+      yearP.appendChild(yearText);
+    } else {
+      var _yearText = document.createTextNode('Fyrir ' + ar + ' \xE1rum s\xED\xF0an');
+      yearP.appendChild(_yearText);
+    }
     div.appendChild(yearP);
   } else if (month < timi) {
     var manudur = Math.floor(timi / month);
     var monthP = document.createElement('p');
     monthP.setAttribute('class', 'video_date');
-    var monthText = document.createTextNode('Fyrir ' + manudur + ' mánuðum síðan');
-    monthP.appendChild(monthText);
+    if (manudur === 1) {
+      var monthText = document.createTextNode('Fyrir 1 mánuði síðan');
+      monthP.appendChild(monthText);
+    } else {
+      var _monthText = document.createTextNode('Fyrir ' + manudur + ' m\xE1nu\xF0um s\xED\xF0an');
+      monthP.appendChild(_monthText);
+    }
     div.appendChild(monthP);
   } else if (week < timi) {
     var vika = Math.floor(timi / week);
     var weekP = document.createElement('p');
     weekP.setAttribute('class', 'video_date');
-    var weekText = document.createTextNode('Fyrir ' + vika + ' vikum síðan');
-    weekP.appendChild(weekText);
+    if (vika === 1) {
+      var weekText = document.createTextNode('Fyrir 1 viku síðan');
+      weekP.appendChild(weekText);
+    } else {
+      var _weekText = document.createTextNode('Fyrir ' + vika + ' vikum s\xED\xF0an');
+      weekP.appendChild(_weekText);
+    }
     div.appendChild(weekP);
   } else if (day < timi) {
     var dagur = Math.floor(timi / day);
     var dayP = document.createElement('p');
     dayP.setAttribute('class', 'video_date');
-    var dayText = document.createTextNode('Fyrir ' + dagur + ' dögum síðan');
-    dayP.appendChild(dayText);
+    if (dagur === 1) {
+      var dayText = document.createTextNode('Fyrir 1 degi síðan');
+      dayP.appendChild(dayText);
+    } else {
+      var _dayText = document.createTextNode('Fyrir ' + dagur + ' d\xF6gum s\xED\xF0an');
+      dayP.appendChild(_dayText);
+    }
     div.appendChild(dayP);
   } else {
     var klukkutimar = Math.floor(timi / hour);
     var hourP = document.createElement('p');
     hourP.setAttribute('class', 'video_date');
-    var hourText = document.createTextNode('Fyrir ' + klukkutimar + ' klukkutímum síðan');
-    hourP.appendChild(hourText);
+    if (klukkutimar === 1) {
+      var hourText = document.createTextNode('Fyrir 1 klukkutíma síðan');
+      hourP.appendChild(hourText);
+    } else {
+      var _hourText = document.createTextNode('Fyrir ' + klukkutimar + ' klukkut\xEDmum s\xED\xF0an');
+      hourP.appendChild(_hourText);
+    }
     div.appendChild(hourP);
   }
 }
@@ -127,69 +155,29 @@ var Videos = function () {
 
       createHeader();
 
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+      var _loop = function _loop(i) {
+        var section = document.createElement('section');
+        var videoboxes = document.createElement('div');
+        videoboxes.setAttribute('class', 'video_boxes');
 
-      try {
-        for (var _iterator = data.categories[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _ref = _step.value;
-          var title = _ref.title;
-          var videos = _ref.videos;
+        showTitle(section, data.categories[i].title);
 
-          var section = document.createElement('section');
-          var videoboxes = document.createElement('div');
-          videoboxes.setAttribute('class', 'video_boxes');
+        section.appendChild(videoboxes);
 
-          showTitle(section, title);
+        var _loop2 = function _loop2(j) {
+          var video = data.videos.find(function (v) {
+            return v.id === data.categories[i].videos[j];
+          });
+          showVideo(section, videoboxes, video);
+        };
 
-          section.appendChild(videoboxes);
-
-          var _loop = function _loop(id) {
-            var video = data.videos.find(function (v) {
-              return v.id === id;
-            });
-            showVideo(section, videoboxes, video);
-          };
-
-          var _iteratorNormalCompletion2 = true;
-          var _didIteratorError2 = false;
-          var _iteratorError2 = undefined;
-
-          try {
-            for (var _iterator2 = videos[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-              var id = _step2.value;
-
-              _loop(id);
-            }
-          } catch (err) {
-            _didIteratorError2 = true;
-            _iteratorError2 = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                _iterator2.return();
-              }
-            } finally {
-              if (_didIteratorError2) {
-                throw _iteratorError2;
-              }
-            }
-          }
+        for (var j = 0; j < data.categories[i].videos.length; j += 1) {
+          _loop2(j);
         }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
+      };
+
+      for (var i = 0; i < data.categories.length; i += 1) {
+        _loop(i);
       }
     };
     request.send();

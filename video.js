@@ -3,6 +3,7 @@ function createButton(buttons, pic, classs) {
   button.setAttribute('class', classs);
   const picture = document.createElement('IMG');
   picture.src = (pic);
+  picture.setAttribute('class', 'picture');
   button.appendChild(picture);
   buttons.appendChild(button);
 }
@@ -12,6 +13,7 @@ function play(video) {
   const title = document.createTextNode(video.title);
   const h1 = document.createElement('h1');
   const divtitle = document.createElement('div');
+  divtitle.setAttribute('class', 'videotitle');
   const sectiontitle = document.createElement('section');
 
   h1.appendChild(title);
@@ -29,9 +31,12 @@ function play(video) {
   sectionvid.setAttribute('class', 'secvid');
   main.appendChild(sectionvid);
 
+  vid.setAttribute('poster', video.poster);
+  vid.setAttribute('class', 'video');
+
   const sectionbuttons = document.createElement('section');
   const buttons = document.createElement('div');
-  buttons.setAttribute('id', 'buttons');
+  buttons.setAttribute('class', 'buttons');
 
   sectionbuttons.appendChild(buttons);
   main.appendChild(sectionbuttons);
@@ -39,6 +44,7 @@ function play(video) {
   const overlaybutton = document.createElement('span');
   overlaybutton.setAttribute('class', 'button overlay');
   const picture = document.createElement('IMG');
+  picture.setAttribute('class', 'picture');
   picture.src = 'img/play.svg';
   overlaybutton.appendChild(picture);
   divvid.appendChild(overlaybutton);
@@ -106,7 +112,7 @@ function play(video) {
 
   const baka = document.createElement('a');
   const text = document.createTextNode('Til Baka');
-  baka. setAttribute('class', 'tilBaka');
+  baka.setAttribute('class', 'tilBaka');
   baka.setAttribute('href', 'index.html');
   baka.appendChild(text);
   main.appendChild(baka);
@@ -115,19 +121,41 @@ function play(video) {
 
 function byrja() {
   const request = new XMLHttpRequest();
-  const URL = 'videos.json' + window.location.search;
+  const URL = `videos.json${window.location.search}`;
   request.open('GET', URL, true);
 
   request.onload = () => {
     const data = JSON.parse(request.response);
-    const numer = location.search.substr(4);
+    const numer = window.location.search.substr(4);
+    if (numer === '1') {
+      play(data.videos[0]);
+    } else if (numer === '2') {
+      play(data.videos[1]);
+    } else if (numer === '3') {
+      play(data.videos[2]);
+    } else if (numer === '4') {
+      play(data.videos[3]);
+    } else {
+      const h2 = document.createElement('h2');
+      const texti = document.createTextNode('Myndbandaleigan');
+      h2.appendChild(texti);
+      const div = document.createElement('div');
+      div.setAttribute('class', '');
+      document.querySelector('main').appendChild(div);
 
-    if (numer == 1 || numer == 2 || numer == 3 || numer == 4) {
-      for (let i = 0; i < 4; i += 1) {
-        if (numer == data.videos[i].id) {
-          play(data.videos[i]);
-        }
-      }
+      const villa = document.createElement('p');
+      const villutext = document.createTextNode('Videó er ekki til');
+      villa.setAttribute('class', '');
+      villa.appendChild(villutext);
+      div.appendChild(h2);
+      div.appendChild(villa);
+
+      const baka = document.createElement('a');
+      const text = document.createTextNode('Til Baka');
+      baka.setAttribute('class', 'tilBaka');
+      baka.setAttribute('href', 'index.html');
+      baka.appendChild(text);
+      document.querySelector('main').appendChild(baka);
     }
   };
   request.send();
