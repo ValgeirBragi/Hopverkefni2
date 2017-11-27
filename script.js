@@ -53,7 +53,7 @@ function showVideo(section, videoboxes, video) {
   }
 
   const div2 = document.createElement('div');
-  div2.setAttribute('class', '');
+  div2.setAttribute('class', 'video_duration');
   const text = document.createTextNode(min + ':' + sek);
 
   div2.appendChild(text);
